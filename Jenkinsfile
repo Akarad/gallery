@@ -25,22 +25,22 @@ pipeline{
                 git 'https://github.com/Akarad/gallery'
            }
         }
-         stage ('Tests stage'){
+        stage ('Tests stage'){
            steps{
                 git 'npm test'
            }
-        }
-        stage ('Build stage'){
-           steps{
-                sh 'npm install'
-           }
-           post{
-               failure{
+            post{
+                failure{
                     emailext attachLog: true,
                     body: EMAIL_BODY,
                     subject: EMAIL_SUBJECT_TEST_FAILURE,
                     to: EMAIL_RECEPIENT  
-               }
+                }
+            }
+        }
+        stage ('Build stage'){
+           steps{
+                sh 'npm install'
            }
         }
         stage ('Deploy to heroku'){
