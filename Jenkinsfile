@@ -27,7 +27,7 @@ pipeline{
         }
         stage ('Tests stage'){
            steps{
-                git 'npm test'
+                sh 'npm test'
            }
             post{
                 failure{
