@@ -29,8 +29,6 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
 // })
 
 
-
-
 // View Engine
 app.set('view engine', 'ejs');
 
@@ -40,12 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // body parser middleware
 app.use(express.json())
 
-
 app.use('/', index);
 app.use('/image', image);
-
-
-
  
 const PORT = process.env.PORT || 5000;
 app.listen(PORT,() =>{
