@@ -1,5 +1,21 @@
 pipeline{
     agent any
+    environment{
+        EMAIL_BODY =
+            """
+                <p>EXECUTED: Job <strong>\'${env.JOB_NAME}:${env.BUILD_NUMBER}\'</strong></p>
+                <p>
+                View console output at 
+                "<a href="${env.BUILD_URL}">${env.JOB_NAME}:${env.BUILD_NUMBER}</a>"
+                </p> 
+                <p><em>(Build log is attached.)</em></p>
+
+            """
+            EMAIL_SUBJECT_SUCCESS = "Status: 'SUCCESS' -Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'" 
+            EMAIL_SUBJECT_FAILURE = "Status: 'FAILURE' -Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'"
+            EMAIL_SUBJECT_TEST_FAILURE = "Status: 'TEST FAILURE' -Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'"
+            EMAIL_RECEPIENT = 'dianaakara@gmail.com' 
+    }
     tools{
         nodejs 'Nodejs'
     }
@@ -9,9 +25,23 @@ pipeline{
                 git 'https://github.com/Akarad/gallery'
            }
         }
+         stage ('Tests stage'){
+           steps{
+                git 'npm test'
+           }
+        }
+
         stage ('Build stage'){
            steps{
                 sh 'npm install'
+           }
+           post{
+               success{
+                    emailext attachLog: true,
+                    body: EMAIL_BODY,
+                    subject: EMAIL_SUBJECT_TEST_FAILURE,
+                    to: EMAIL_RECEPIENT  
+               }
            }
         }
         stage ('Deploy to heroku'){
