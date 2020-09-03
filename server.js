@@ -11,7 +11,6 @@ let image = require('./routes/image');
 // Initializing the app
 const app = express();
 
-const config = require("./_config"); 
 const MONGODB_URI =
 process.env.MONGODB_URI || config.mongoURI[app.settings.env];
 mongoose.connect(
