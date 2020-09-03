@@ -30,13 +30,12 @@ pipeline{
                 git 'npm test'
            }
         }
-
         stage ('Build stage'){
            steps{
                 sh 'npm install'
            }
            post{
-               success{
+               failure{
                     emailext attachLog: true,
                     body: EMAIL_BODY,
                     subject: EMAIL_SUBJECT_TEST_FAILURE,
