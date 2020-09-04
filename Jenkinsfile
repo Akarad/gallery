@@ -30,7 +30,7 @@ pipeline{
                 sh 'npm test'
            }
             post{
-                success{
+                failure{
                     emailext attachLog: true,
                     body: EMAIL_BODY,
                     subject: EMAIL_SUBJECT_TEST_FAILURE,
