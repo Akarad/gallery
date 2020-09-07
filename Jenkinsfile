@@ -44,9 +44,10 @@ pipeline{
             }
         }
         stage ('slack notification'){
-                   
-           slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-            }
+             steps{
+                 slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"  
+           }
+        }
         }
         post{
                 failure{
