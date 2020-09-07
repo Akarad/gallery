@@ -45,7 +45,8 @@ pipeline{
         }
         stage ('slack notification'){
              steps{
-                 slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"  
+                 slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                 slackSend color:"warning",message: "Build Succesful - <https://moringa-dark-room.herokuapp.com/|Open>"
            }
         }
         }
