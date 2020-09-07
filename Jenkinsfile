@@ -21,34 +21,19 @@ pipeline{
     }
 
     stages{
-         stage ('checkout'){
-           checkout scm
-
-           sh 'git log HEAD^..HEAD --pretty="%h %an -%s" > GIT_CHANGES'
-           def lastChanges = readFile('GIT_CHANGES')
-           slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-        }
         stage ('clone repository'){
            steps{
                 git 'https://github.com/Akarad/gallery'
            }
         }
-        stage ('Tests stage'){
-           steps{
-                sh 'npm test'
-           }
-            post{
-                failure{
-                    emailext attachLog: true,
-                    body: EMAIL_BODY,
-                    subject: EMAIL_SUBJECT_TEST_FAILURE,
-                    to: EMAIL_RECEPIENT  
-                }
-            }
-        }
         stage ('Build stage'){
            steps{
                 sh 'npm install'
+           }
+        }
+        stage ('Tests stage'){
+           steps{
+                sh 'npm test'
            }
         }
         stage ('Deploy to heroku'){
@@ -58,5 +43,17 @@ pipeline{
                 }
             }
         }
+        stage ('slack notification'){
+                   
+           slackSend color:"warning",message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+            }
+        }
+        post{
+                failure{
+                    emailext attachLog: true,
+                    body: EMAIL_BODY,
+                    subject: EMAIL_SUBJECT_TEST_FAILURE,
+                    to: EMAIL_RECEPIENT 
+                }
+            }
     }    
-}
